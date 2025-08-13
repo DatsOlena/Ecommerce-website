@@ -19,16 +19,13 @@ import { setCurrentUser } from "./store/user/user.action";
 const App = () => {
   const dispatch = useDispatch();
 
-    useEffect(() => {
-      const unsubscribe = onAuthStateChangedListener((user) => {
-        if (user) {
-          createUserDocumentFromAuth(user);
-        }
-        dispatch(setCurrentUser(user));
-      });
-  
-      return unsubscribe;
-    }, []);
+useEffect(() => {
+  const unsubscribe = onAuthStateChangedListener(async (user) => {
+    if (user) await createUserDocumentFromAuth(user);
+    dispatch(setCurrentUser(user || null));
+  });
+  return unsubscribe;
+}, [dispatch]);
 
   return (
     <Routes>

@@ -1,9 +1,6 @@
-  import { createAction } from '../../utils/firebase/reducers/reducer.utils';
-  import USER_ACTION_TYPES from './user.types';
-  
-  export const setCurrentUser = (user) => {
+import { USER_ACTION_TYPES } from './user.types';
 
-      createAction(USER_ACTION_TYPES.SET_CURRENT_USER,
-        user
-      );
-  }
+export const setCurrentUser = (user) => ({
+  type: USER_ACTION_TYPES.SET_CURRENT_USER,
+  payload: user,
+});

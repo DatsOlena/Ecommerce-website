@@ -1,19 +1,17 @@
+// src/store/store.js
 import { configureStore } from '@reduxjs/toolkit';
-import { logger } from 'redux-logger';
 import { rootReducer } from './root-reducer';
+import { createLogger } from 'redux-logger';
 
-const store = configureStore({
+const logger = createLogger({ collapsed: true });
+
+export const store = configureStore({
   reducer: rootReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
-      },
-    }).concat(logger),
+  // You store a Firebase User object in state, which is not serializable.
+  // Disable the serializable check to avoid noisy warnings.
+  middleware: (getDefaultMiddleware) => {
+    const base = getDefaultMiddleware({ serializableCheck: false });
+    return process.env.NODE_ENV !== 'production' ? base.concat(logger) : base;
+  },
+  devTools: process.env.NODE_ENV !== 'production',
 });
-
-// Test dispatch to see if logger works
-console.log('🏪 Store created, testing dispatch...');
-store.dispatch({ type: 'TEST_ACTION', payload: 'Logger test' });
-
-export { store };
