@@ -20,9 +20,14 @@ const App = () => {
   const dispatch = useDispatch();
 
 useEffect(() => {
-  const unsubscribe = onAuthStateChangedListener(async (user) => {
+  const unsubscribe = onAuthStateChangedListener(async (user) => {      
     if (user) await createUserDocumentFromAuth(user);
-    dispatch(setCurrentUser(user || null));
+
+    const safeUser = user
+      ? { uid: user.uid, email: user.email, displayName: user.displayName }
+      : null;
+
+    dispatch(setCurrentUser(safeUser));
   });
   return unsubscribe;
 }, [dispatch]);
