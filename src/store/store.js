@@ -8,8 +8,15 @@ import { rootReducer } from './root-reducer';
 
 const logger = createLogger({ collapsed: true });
 
+const persistConfig = {
+  key: 'root',
+  storage,
+  blacklist: ['user'] // user will not be persisted
+}
+const persistedReducer = persistReducer(persistConfig, rootReducer)
+
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: persistedReducer,
   // You store a Firebase User object in state, which is not serializable.
   // Disable the serializable check to avoid noisy warnings.
   middleware: (getDefaultMiddleware) => {
@@ -18,13 +25,5 @@ export const store = configureStore({
   },
   devTools: process.env.NODE_ENV !== 'production',
 });
-
-
-const persistConfig = {
-  key: 'root',
-  storage,
-  blacklist: ['user'] // user will not be persisted
-}
-const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 export const persistor = persistStore(store)
