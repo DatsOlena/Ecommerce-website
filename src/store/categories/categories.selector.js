@@ -1,6 +1,16 @@
 import { createSelector } from "reselect";
 
-export const selectCategories = (state) => state.categories.categories;
+const selectCategoriesSlice = (state) => state.categories;
+
+export const selectCategories = createSelector(
+  [selectCategoriesSlice],
+  (categoriesSlice) => categoriesSlice.categories
+);
+
+export const selectCategoriesIsLoading = createSelector(
+  [selectCategoriesSlice],
+  (categoriesSlice) => categoriesSlice.isLoading
+);
 
 export const selectCategoriesMap = createSelector(
   [selectCategories],
